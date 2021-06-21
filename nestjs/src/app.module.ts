@@ -1,18 +1,10 @@
-import { CacheModule, Module } from '@nestjs/common';
-import * as redisStore from 'cache-manager-redis-store'; //uses node_redis
+import { Module } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
+import { CacheModule } from './shared/cache.module';
 
 @Module({
-  imports: [
-    CacheModule.register({
-      store: redisStore,
-      ttl: 30, // seconds
-      max: 10, // maximum number of items in cache
-      host: 'localhost',
-      port: 5379,
-    }),
-  ],
+  imports: [CacheModule],
   controllers: [AppController],
   providers: [AppService],
 })
