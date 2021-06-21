@@ -1,6 +1,6 @@
 FROM python:3.8
 
-RUN apt-get update && apt-get -y install redis-server
+# RUN apt-get update && apt-get -y install redis-server
 
 WORKDIR /python
 COPY . /python

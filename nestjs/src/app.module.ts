@@ -1,7 +1,7 @@
 import { Module } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
-import { CacheModule } from './shared/cache.module';
+import { CacheModule } from './shared/cache/cache.module';
 
 @Module({
   imports: [CacheModule],
