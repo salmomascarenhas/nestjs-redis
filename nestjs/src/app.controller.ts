@@ -31,6 +31,11 @@ export class AppController {
     return await this.cacheQueue.getCompleted();
   }
 
+  @Get('/getActiveJobs')
+  async getActiveJobs() {
+    return await this.cacheQueue.getActive();
+  }
+
   // Nem precisa chamar, a classe CacheWorker automaticamente completa os Jobs de QUEUE conforme chegam
   @Get('/completeJob/:jobId')
   async completeJob(@Param('jobId') jobId: number) {
