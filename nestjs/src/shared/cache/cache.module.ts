@@ -1,9 +1,9 @@
-import { BullModule, BullQueueInject } from '@anchan828/nest-bullmq';
-import { MiddlewareConsumer, Module } from '@nestjs/common';
-import { createBullBoard } from 'bull-board';
-import { BullMQAdapter } from 'bull-board/bullMQAdapter';
-import { Queue } from 'bullmq';
-import { CacheService } from './cache.service';
+import { BullModule, BullQueueInject } from '@anchan828/nest-bullmq'
+import { MiddlewareConsumer, Module } from '@nestjs/common'
+import { createBullBoard } from 'bull-board'
+import { BullMQAdapter } from 'bull-board/bullMQAdapter'
+import { Queue } from 'bullmq'
+import { CacheQueue, CacheWorker } from './cache.service'
 
 @Module({
   imports: [
@@ -15,19 +15,11 @@ import { CacheService } from './cache.service';
         },
       },
     }),
-    /** DI all your queues and Redis connection */
     BullModule.registerQueue('queue'),
-    // BullModule.registerQueue({
-    //   name: 'queue',
-    //   redis: {
-    //     host: 'cache',
-    //     port: 6379,
-    //   },
-    // }),
   ],
   controllers: [],
-  providers: [CacheService],
-  exports: [CacheModule, CacheService],
+  providers: [CacheQueue, CacheWorker],
+  exports: [CacheQueue, CacheWorker],
 })
 export class CacheModule {
   // constructor(@Inject(CACHE_MANAGER) private cacheManager: Cache) {}
@@ -35,16 +27,14 @@ export class CacheModule {
 
   constructor(
     @BullQueueInject('queue')
-    private readonly queueOne: Queue,
+    private readonly queue: Queue,
   ) {
-    /** Add queues with adapter, one-by-one */
     const { router } = createBullBoard([
-      new BullMQAdapter(this.queueOne, { readOnlyMode: false }),
+      new BullMQAdapter(this.queue, { readOnlyMode: false }),
     ]);
     this.routerTest = router;
     // setQueues([new BullMQAdapter(this.queueOne, { readOnlyMode: false })]);
   }
-
   configure(consumer: MiddlewareConsumer): void {
     consumer.apply(this.routerTest).forRoutes('/bull-board');
   }
