@@ -11,8 +11,6 @@ services:
   back:
     container_name: nest-redis
     build: ./nestjs
-    volumes:
-      - ./nestjs:/nestjs
     ports:
       - 3000:3000
     depends_on:
