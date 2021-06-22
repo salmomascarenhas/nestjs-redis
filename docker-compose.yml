@@ -1,12 +1,15 @@
-version: "3"
+networks:
+    queue-network:
+    back-network:
+
 services:
   cache:
     container_name: cache
     image: redis:6.2
-    ports:
-      - 6379:6379
+    networks:
+        - queue-network
   back:
-    container_name: nest-api
+    container_name: nest-redis
     build: ./nestjs
     volumes:
       - ./nestjs:/nestjs
@@ -14,13 +17,17 @@ services:
       - 3000:3000
     depends_on:
       - cache
-    links:
-      - cache
+    networks:
+        - queue-network
+        - back-network
   python:
-    build: ./python
-    tty: true
+    image: python:3.9
+    volumes:
+        - ./python:/python
+    working_dir: /python
+    command: bash ./start_python.sh
     depends_on:
       - cache
       - back
-    links:
-      - cache
+    networks:
+        - queue-network

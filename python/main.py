@@ -1,18 +1,11 @@
-import json
 from time import sleep
-from redis import Redis
+import redis
 
-
-fila = Redis(host="cache", port=6379, db=0)
-
-
-def servico():
-    while True:
-        recebido = json.loads(fila.blpop("queue"))
-        print(f"recebido: {recebido}")
-        sleep(10)
+fila = redis.Redis(host="cache", port=6379, db=0)
 
 
 if __name__ == '__main__':
     print("iniciando servico")
-    servico()
+    while True:
+        print('salve salve, ta no loop maluco')
+        sleep(5)
