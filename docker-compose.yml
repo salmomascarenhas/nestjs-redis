@@ -9,7 +9,11 @@ services:
     networks:
         - queue-network
   back:
+<<<<<<< HEAD
     container_name: nest-redis
+=======
+    container_name: nest
+>>>>>>> 4fc972c8d3d7d6d0609f909294ba720e6f155ec0
     build: ./nestjs
     volumes:
       - ./nestjs:/nestjs
